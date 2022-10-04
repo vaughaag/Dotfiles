@@ -7,7 +7,7 @@ window:
   padding:
     x: 35
     y: 35
-  decorations: full #Still won't show in a window manger, but will in a desktop environment
+  decorations: full #Window manager config will override
 scrolling:
   history: 10000
   multiplier: 3
@@ -71,5 +71,4 @@ cursor:
     blink-interval: 750
     unfocused_hollow: true
 
-key_bindings:
-  - { key: N, mods: Control, action: SpawnNewInstance }
+
