@@ -7,7 +7,7 @@ window:
   padding:
     x: 35
     y: 35
-  decorations: full #Window manager config will override
+  decorations: full #Still won't show in a window manger, but will in a desktop environment
 scrolling:
   history: 10000
   multiplier: 3
@@ -44,31 +44,54 @@ colors:
 
   # Normal colors
   normal:
-    black:   '0x2c2525'
-    red:     '0xfd6883'
-    green:   '0xadda78'
-    yellow:  '0xf9cc6c'
-    blue:    '0xf38d70'
-    magenta: '0xa8a9eb'
-    cyan:    '0x85dacc'
-    white:   '0xfff1f3'
+      black:   '#1c1f24'
+      red:     '#ff6c6b'
+      green:   '#98be65'
+      yellow:  '#da8548'
+      blue:    '#51afef'
+      magenta: '#c678dd'
+      cyan:    '#5699af'
+      white:   '#202328'
+
+  bright:
+      black:   '#5b6268'
+      red:     '#da8548'
+      green:   '#4db5bd'
+      yellow:  '#ecbe7b'
+      blue:    '#3071db'
+      magenta: '#a9a1e1'
+      cyan:    '#64BAF8'
+      white:   '#dfdfdf'
+
+  #OLD COLOURS
+  #normal:
+    #black:   '0x2c2525'
+    #red:     '0xfd6883'
+    #green:   '0xadda78'
+    #yellow:  '0xf9cc6c'
+    #blue:    '0xf38d70'
+    #magenta: '0xa8a9eb'
+    #cyan:    '0x85dacc'
+    #white:   '0xfff1f3'
 
   # Bright colors
-  bright:
-    black:   '0x72696a'
-    red:     '0xfd6883'
-    green:   '0xadda78'
-    yellow:  '0xf9cc6c'
-    blue:    '0xf38d70'
-    magenta: '0xa8a9eb'
-    cyan:    '0x85dacc'
-    white:   '0xfff1f3'
+  #bright:
+    #black:   '0x72696a'
+    #red:     '0xfd6883'
+    #green:   '0xadda78'
+    #yellow:  '0xf9cc6c'
+    #blue:    '0xf38d70'
+    #magenta: '0xa8a9eb'
+    #cyan:    '0x85dacc'
+    #white:   '0xfff1f3'
 
 cursor:
   style:
-    shape: Beam
+    shape: underline
     blinking: off
     blink-interval: 750
     unfocused_hollow: true
 
-
+key_bindings:
+  - { key: N, mods: Control, action: SpawnNewInstance }
+  - { key: F, mods: Control, action: ToggleFullscreen }
