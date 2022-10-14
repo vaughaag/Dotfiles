@@ -17,7 +17,7 @@ local my_table = awful.util.table or gears.table -- 4.{0,1} compatibility
 local theme                                     = {}
 theme.confdir                                   = os.getenv("HOME") .. "/.config/awesome/themes/multicolor"
 theme.wallpaper                                 = theme.confdir .. "/wall.png"
-theme.font                                      = "xos4 Terminus 8"
+theme.font                                      = "Hack Nerd Font Mono 10"
 theme.menu_bg_normal                            = "#000000"
 theme.menu_bg_focus                             = "#000000"
 theme.bg_normal                                 = "#000000"
@@ -38,10 +38,10 @@ theme.menu_fg_normal                            = "#aaaaaa"
 theme.menu_fg_focus                             = "#ff8c00"
 theme.menu_bg_normal                            = "#050505dd"
 theme.menu_bg_focus                             = "#050505dd"
-theme.widget_temp                               = theme.confdir .. "/icons/temp.png"
+--theme.widget_temp                               = theme.confdir .. "/icons/temp.png"
 theme.widget_uptime                             = theme.confdir .. "/icons/ac.png"
 theme.widget_cpu                                = theme.confdir .. "/icons/cpu.png"
-theme.widget_weather                            = theme.confdir .. "/icons/dish.png"
+--theme.widget_weather                            = theme.confdir .. "/icons/dish.png"
 theme.widget_fs                                 = theme.confdir .. "/icons/fs.png"
 theme.widget_mem                                = theme.confdir .. "/icons/mem.png"
 theme.widget_note                               = theme.confdir .. "/icons/note.png"
@@ -49,7 +49,7 @@ theme.widget_note_on                            = theme.confdir .. "/icons/note_
 theme.widget_netdown                            = theme.confdir .. "/icons/net_down.png"
 theme.widget_netup                              = theme.confdir .. "/icons/net_up.png"
 theme.widget_mail                               = theme.confdir .. "/icons/mail.png"
-theme.widget_batt                               = theme.confdir .. "/icons/bat.png"
+--theme.widget_batt                               = theme.confdir .. "/icons/bat.png"
 theme.widget_clock                              = theme.confdir .. "/icons/clock.png"
 theme.widget_vol                                = theme.confdir .. "/icons/spkr.png"
 theme.taglist_squares_sel                       = theme.confdir .. "/icons/square_a.png"
@@ -103,7 +103,7 @@ mytextclock.font = theme.font
 theme.cal = lain.widget.cal({
     attach_to = { mytextclock },
     notification_preset = {
-        font = "xos4 Terminus 10",
+        font = "Hack Nerd Font Mono 10",
         fg   = theme.fg_normal,
         bg   = theme.bg_normal
     }
@@ -315,12 +315,12 @@ function theme.at_screen_connect(s)
             cpu.widget,
             --fsicon,
             --theme.fs.widget,
-            weathericon,
-            theme.weather.widget,
-            tempicon,
-            temp.widget,
-            baticon,
-            bat.widget,
+            --weathericon,
+            --theme.weather.widget,
+            --tempicon,
+            --temp.widget,
+            --baticon,
+            --bat.widget,
             clockicon,
             mytextclock,
         },
