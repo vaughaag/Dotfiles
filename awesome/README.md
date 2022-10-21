@@ -1,6 +1,4 @@
-## Work in Progress
-
-# Asewome WM
+# Asewome WM - a work in progress
 
 ![](images/001.png)
 
