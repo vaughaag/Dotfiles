@@ -2,7 +2,7 @@
 
 # Asewome WM
 
-![](/images/001.png)
+![](images/001.png)
 
 This is my first go at customzing Awesome. The config is roundly based on one of the Copycat themes; multicolour but I have removed much, changed and added my own touches.
 
