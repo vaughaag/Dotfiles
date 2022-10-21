@@ -1,7 +1,7 @@
 --[[
 
-     Awesome WM configuration template
-     github.com/lcpz
+     VAUGHAAG Awesome Config Based on Copycats Multicolor Base Theme
+
 
 --]]
 
@@ -84,36 +84,28 @@ awful.spawn.with_shell(
 
 -- {{{ Variable definitions
 
-local themes = {
-    "blackburn",       -- 1
-    "copland",         -- 2
-    "dremora",         -- 3
-    "holo",            -- 4
-    "multicolor",      -- 5
-    "powerarrow",      -- 6
-    "powerarrow-dark", -- 7
-    "rainbow",         -- 8
-    "steamburn",       -- 9
-    "vertex"           -- 10
-}
+beautiful.init(gears.filesystem.get_configuration_dir().. "themes/theme.lua")
 
-local chosen_theme = themes[5]
 local modkey       = "Mod4"
 local altkey       = "Mod1"
-local terminal     = "urxvtc"
+local terminal     = "alacritty"
 local vi_focus     = false -- vi-like client focus https://github.com/lcpz/awesome-copycats/issues/275
 local cycle_prev   = true  -- cycle with only the previously focused client or all https://github.com/lcpz/awesome-copycats/issues/274
-local editor       = os.getenv("EDITOR") or "nvim"
-local browser      = "librewolf"
+local editor       = os.getenv("kate") or "nvim"
+local browser      = "brave"
+local filemanager  = "pcmanfm"
+local emailclient  = "thunderbird"
 
+              
 awful.util.terminal = terminal
-awful.util.tagnames = { "1", "2", "3", "4", "5" }
+awful.util.tagnames = { "www", "term", "nav", "doc", "coms", "admin", "vm", "gfx", "scrap" }
 awful.layout.layouts = {
-    awful.layout.suit.floating,
     awful.layout.suit.tile,
-    awful.layout.suit.tile.left,
+    awful.layout.suit.floating,
+    --awful.layout.suit.floating.middle,
+    --awful.layout.suit.tile.left,
     awful.layout.suit.tile.bottom,
-    awful.layout.suit.tile.top,
+    --awful.layout.suit.tile.top,
     --awful.layout.suit.fair,
     --awful.layout.suit.fair.horizontal,
     --awful.layout.suit.spiral,
@@ -127,7 +119,7 @@ awful.layout.layouts = {
     --awful.layout.suit.corner.se,
     --lain.layout.cascade,
     --lain.layout.cascade.tile,
-    --lain.layout.centerwork,
+    --lain.layout.centerwork, -- good for ultrawide setup
     --lain.layout.centerwork.horizontal,
     --lain.layout.termfair,
     --lain.layout.termfair.center
@@ -171,8 +163,6 @@ awful.util.tasklist_buttons = mytable.join(
      awful.button({ }, 5, function() awful.client.focus.byidx(-1) end)
 )
 
-beautiful.init(string.format("%s/.config/awesome/themes/%s/theme.lua", os.getenv("HOME"), chosen_theme))
-
 -- }}}
 
 -- {{{ Menu
@@ -197,43 +187,6 @@ awful.util.mymainmenu = freedesktop.menu.build {
     }
 }
 
--- Hide the menu when the mouse leaves it
---[[
-awful.util.mymainmenu.wibox:connect_signal("mouse::leave", function()
-    if not awful.util.mymainmenu.active_child or
-       (awful.util.mymainmenu.wibox ~= mouse.current_wibox and
-       awful.util.mymainmenu.active_child.wibox ~= mouse.current_wibox) then
-        awful.util.mymainmenu:hide()
-    else
-        awful.util.mymainmenu.active_child.wibox:connect_signal("mouse::leave",
-        function()
-            if awful.util.mymainmenu.wibox ~= mouse.current_wibox then
-                awful.util.mymainmenu:hide()
-            end
-        end)
-    end
-end)
---]]
-
--- Set the Menubar terminal for applications that require it
---menubar.utils.terminal = terminal
-
--- }}}
-
--- {{{ Screen
-
--- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
-screen.connect_signal("property::geometry", function(s)
-    -- Wallpaper
-    if beautiful.wallpaper then
-        local wallpaper = beautiful.wallpaper
-        -- If wallpaper is a function, call it with the screen
-        if type(wallpaper) == "function" then
-            wallpaper = wallpaper(s)
-        end
-        gears.wallpaper.maximized(wallpaper, s, true)
-    end
-end)
 
 -- No borders when rearranging only 1 non-floating or maximized client
 screen.connect_signal("arrange", function (s)
@@ -375,7 +328,7 @@ globalkeys = mytable.join(
         {description = "toggle wibox", group = "awesome"}),
 
     -- On-the-fly useless gaps change
-    awful.key({ altkey, "Control" }, "+", function () lain.util.useless_gaps_resize(1) end,
+    awful.key({ altkey, "Control" }, "+", function () lain.util.useless_gaps_resize(6) end,
               {description = "increment useless gaps", group = "tag"}),
     awful.key({ altkey, "Control" }, "-", function () lain.util.useless_gaps_resize(-1) end,
               {description = "decrement useless gaps", group = "tag"}),
@@ -522,8 +475,24 @@ globalkeys = mytable.join(
               {description = "copy gtk to terminal", group = "hotkeys"}),
 
     -- User programs
+    -- if using multimonitor setup add and wish applications to spawn to a specific screen and tag edit below as
+    --{ rule = { instance ="brave" },
+    --  properties = {screen = 1, tag = "1"} }),
     awful.key({ modkey }, "q", function () awful.spawn(browser) end,
-              {description = "run browser", group = "launcher"}),
+              {description = "open a browser", group = "launcher"},
+              { rule = { instance ="brave" },
+                properties = {tag = "1"} }),
+    awful.key({ modkey,           }, "e", function () awful.spawn(filemanager) end,
+              {description = "open a file manager", group = "launcher"},
+              { rule = { instance ="pcmanfm" },
+                properties = {tag = "3"} }),
+    awful.key({ modkey,           }, "a", function () awful.spawn(emailclient) end,
+              {description = "open  email", group = "launcher"},
+              { rule = { instance ="thunderbird" },
+                properties = {tag = "5"} }),
+
+    --awful.key({ modkey }, "e", function () awful.spawn(dolphin) end,
+     --         {description = "open a filemanager", group = "launcher"}),
 
     -- Default
     --[[ Menubar
@@ -547,8 +516,15 @@ globalkeys = mytable.join(
         {description = "show rofi", group = "launcher"}),
     --]]
     -- Prompt
-    awful.key({ modkey }, "r", function () awful.screen.focused().mypromptbox:run() end,
-              {description = "run prompt", group = "launcher"}),
+    awful.key({ modkey }, "r", function ()
+    awful.util.spawn("dmenu_run") end,
+              {description = "run dmenu", group = "launcher"}),
+    awful.key({ modkey, "Shift"   }, "x", function ()
+    awful.util.spawn("rofi -show drun -theme ") end,
+              {description = "run dmenu", group = "launcher"}),
+
+    --awful.key({ modkey }, "r", function () awful.screen.focused().mypromptbox:run() end,
+             -- {description = "run prompt", group = "launcher"}),
 
     awful.key({ modkey }, "x",
               function ()
@@ -730,12 +706,12 @@ awful.rules.rules = {
 
     -- Add titlebars to normal clients and dialogs
     { rule_any = {type = { "normal", "dialog" }
-      }, properties = { titlebars_enabled = true }
+      }, properties = { titlebars_enabled = false }
     },
 
-    -- Set Firefox to always map on the tag named "2" on screen 1.
-    -- { rule = { class = "Firefox" },
-    --   properties = { screen = 1, tag = "2" } },
+    { rule = { class = browser },
+      properties = { screen = 1, tag = awful.util.tagnames[www],switchtotag = true }},
+      
 }
 
 -- }}}
@@ -804,11 +780,25 @@ client.connect_signal("request::titlebars", function(c)
 end)
 
 -- Enable sloppy focus, so that focus follows mouse.
-client.connect_signal("mouse::enter", function(c)
-    c:emit_signal("request::activate", "mouse_enter", {raise = vi_focus})
-end)
+--client.connect_signal("mouse::enter", function(c)
+--    c:emit_signal("request::activate", "mouse_enter", {raise = vi_focus})
+--end)
 
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 
 -- }}}
+
+-- gaps
+beautiful.useless_gap = 6
+
+
+--Autostart
+awful.spawn.with_shell("picom")
+awful.spawn.with_shell("nitrogen --restore")
+awful.spawn.with_shell("nm-applet")
+awful.spawn.with_shell("volumeicon")
+awful.spawn.with_shell("lxsession")
+
+
+   

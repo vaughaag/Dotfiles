@@ -16,20 +16,20 @@ local my_table = awful.util.table or gears.table -- 4.{0,1} compatibility
 
 local theme                                     = {}
 theme.confdir                                   = os.getenv("HOME") .. "/.config/awesome/themes/multicolor"
-theme.wallpaper                                 = theme.confdir .. "/wall.png"
+theme.wallpaper                                 = theme.confdir .. "/wall.jpg"
 theme.font                                      = "Hack Nerd Font Mono 10"
 theme.menu_bg_normal                            = "#000000"
 theme.menu_bg_focus                             = "#000000"
 theme.bg_normal                                 = "#000000"
-theme.bg_focus                                  = "#000000"
+theme.bg_focus                                  = "#444444"
 theme.bg_urgent                                 = "#000000"
 theme.fg_normal                                 = "#aaaaaa"
 theme.fg_focus                                  = "#ff8c00"
 theme.fg_urgent                                 = "#af1d18"
 theme.fg_minimize                               = "#ffffff"
-theme.border_width                              = dpi(1)
+theme.border_width                              = dpi(4)
 theme.border_normal                             = "#1c2022"
-theme.border_focus                              = "#606060"
+theme.border_focus                              = "#5b5b5b"
 theme.border_marked                             = "#3ca4d8"
 theme.menu_border_width                         = 0
 theme.menu_width                                = dpi(130)
@@ -46,12 +46,12 @@ theme.widget_fs                                 = theme.confdir .. "/icons/fs.pn
 theme.widget_mem                                = theme.confdir .. "/icons/mem.png"
 theme.widget_note                               = theme.confdir .. "/icons/note.png"
 theme.widget_note_on                            = theme.confdir .. "/icons/note_on.png"
-theme.widget_netdown                            = theme.confdir .. "/icons/net_down.png"
-theme.widget_netup                              = theme.confdir .. "/icons/net_up.png"
+--theme.widget_netdown                            = theme.confdir .. "/icons/net_down.png"
+--theme.widget_netup                              = theme.confdir .. "/icons/net_up.png"
 theme.widget_mail                               = theme.confdir .. "/icons/mail.png"
 --theme.widget_batt                               = theme.confdir .. "/icons/bat.png"
 theme.widget_clock                              = theme.confdir .. "/icons/clock.png"
-theme.widget_vol                                = theme.confdir .. "/icons/spkr.png"
+--theme.widget_vol                                = theme.confdir .. "/icons/spkr.png"
 theme.taglist_squares_sel                       = theme.confdir .. "/icons/square_a.png"
 theme.taglist_squares_unsel                     = theme.confdir .. "/icons/square_b.png"
 theme.tasklist_plain_task_name                  = true
@@ -95,8 +95,8 @@ local markup = lain.util.markup
 
 -- Textclock
 os.setlocale(os.getenv("LANG")) -- to localize the clock
-local clockicon = wibox.widget.imagebox(theme.widget_clock)
-local mytextclock = wibox.widget.textclock(markup("#7788af", "%A %d %B ") .. markup("#ab7367", ">") .. markup("#de5e1e", " %H:%M "))
+--local clockicon = wibox.widget.imagebox(theme.widget_clock)
+local mytextclock = wibox.widget.textclock(markup("#ffffff", "%d/%m/%y ") .. markup("#bcbcbc", "") .. markup("#ffffff", "%H:%M"))
 mytextclock.font = theme.font
 
 -- Calendar
@@ -160,7 +160,7 @@ theme.mail = lain.widget.imap({
 local cpuicon = wibox.widget.imagebox(theme.widget_cpu)
 local cpu = lain.widget.cpu({
     settings = function()
-        widget:set_markup(markup.fontfg(theme.font, "#e33a6e", cpu_now.usage .. "% "))
+        widget:set_markup(markup.fontfg(theme.font, "#aaaaaa", cpu_now.usage .. "% "))
     end
 })
 
@@ -210,8 +210,8 @@ local netupinfo = lain.widget.net({
             theme.weather.update()
         end
 
-        widget:set_markup(markup.fontfg(theme.font, "#e54c62", net_now.sent .. " "))
-        netdowninfo:set_markup(markup.fontfg(theme.font, "#87af5f", net_now.received .. " "))
+        widget:set_markup(markup.fontfg(theme.font, "#aaaaaa", net_now.sent .. " "))
+        netdowninfo:set_markup(markup.fontfg(theme.font, "#aaaaaa", net_now.received .. " "))
     end
 })
 
@@ -219,7 +219,7 @@ local netupinfo = lain.widget.net({
 local memicon = wibox.widget.imagebox(theme.widget_mem)
 local memory = lain.widget.mem({
     settings = function()
-        widget:set_markup(markup.fontfg(theme.font, "#e0da37", mem_now.used .. "M "))
+        widget:set_markup(markup.fontfg(theme.font, "#aaaaaa", mem_now.used .. "M "))
     end
 })
 
@@ -283,11 +283,18 @@ function theme.at_screen_connect(s)
     s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, awful.util.tasklist_buttons)
 
     -- Create the wibox
-    s.mywibox = awful.wibar({ position = "top", screen = s, height = dpi(20), bg = theme.bg_normal, fg = theme.fg_normal })
+    s.mywibox = awful.wibar({ position = "top", screen = s, height = dpi(20), bg = theme.bg_normal .. "90" })
+
+    local logout_menu_widget = require("awesome-wm-widgets.logout-menu-widget.logout-menu")
+    local volume_widget = require('awesome-wm-widgets.volume-widget.volume')
+    local net_speed_widget = require("awesome-wm-widgets.net-speed-widget.net-speed")
+    local todo_widget = require("awesome-wm-widgets.todo-widget.todo")
+    local cpu_widget = require("awesome-wm-widgets.cpu-widget.cpu-widget")
 
     -- Add widgets to the wibox
     s.mywibox:setup {
         layout = wibox.layout.align.horizontal,
+        expand = "none",
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
             --s.mylayoutbox,
@@ -295,20 +302,35 @@ function theme.at_screen_connect(s)
             s.mypromptbox,
             mpdicon,
             theme.mpd.widget,
+            todo_widget(),
         },
         --s.mytasklist, -- Middle widget
-        nil,
+        { -- Middle widgets
+            layout = wibox.layout.fixed.horizontal,
+            clockicon,
+            mytextclock,
+        },
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
             wibox.widget.systray(),
             --mailicon,
             --theme.mail.widget,
-            netdownicon,
-            netdowninfo,
-            netupicon,
-            netupinfo.widget,
-            volicon,
-            theme.volume.widget,
+            cpu_widget({
+            width = 20,
+            step_width = 2,
+            step_spacing = 0,
+            color = '#434c5e'
+            }),
+            volume_widget{
+            widget_type = 'arc'
+        },
+            --netdownicon,
+            --netdowninfo,
+            --netupicon,
+            --netupinfo.widget,
+            net_speed_widget(),
+            --volicon,
+            --theme.volume.widget,
             memicon,
             memory.widget,
             cpuicon,
@@ -321,13 +343,15 @@ function theme.at_screen_connect(s)
             --temp.widget,
             --baticon,
             --bat.widget,
-            clockicon,
-            mytextclock,
+            --clockicon,
+            --mytextclock,
+            s.mylayoutbox,
+            logout_menu_widget(),
         },
     }
 
-    -- Create the bottom wibox
-    s.mybottomwibox = awful.wibar({ position = "bottom", screen = s, border_width = 0, height = dpi(20), bg = theme.bg_normal, fg = theme.fg_normal })
+    -- Create the bottom wibox !!UNUSED!!
+    s.mybottomwibox = awful.wibar({ position = "bottom", screen = s, border_width = 0, height = dpi(1), bg = theme.bg_normal, fg = theme.fg_normal })
 
     -- Add widgets to the bottom wibox
     s.mybottomwibox:setup {
@@ -335,10 +359,10 @@ function theme.at_screen_connect(s)
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
         },
-        s.mytasklist, -- Middle widget
+        --s.mytasklist, -- Middle widget
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
-            s.mylayoutbox,
+            --s.mylayoutbox,
         },
     }
 end
