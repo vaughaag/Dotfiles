@@ -164,6 +164,14 @@ local cpu = lain.widget.cpu({
     end
 })
 
+--Check Updates
+local pacupdates = awful.widget.watch('bash -c "checkupdates | wc -l"', 20, function(widget, stdout) 
+    widget:set_markup(markup.fontfg(theme.font, "#ff8c00", "   " .. stdout .. "   " ))
+end)
+
+-- Spacing
+local separator = wibox.widget.textbox("  ")
+
 -- Coretemp
 local tempicon = wibox.widget.imagebox(theme.widget_temp)
 local temp = lain.widget.temp({
@@ -324,6 +332,8 @@ function theme.at_screen_connect(s)
             volume_widget{
             widget_type = 'arc'
         },
+            pacupdates,
+            separator,
             --netdownicon,
             --netdowninfo,
             --netupicon,
@@ -346,7 +356,7 @@ function theme.at_screen_connect(s)
             --clockicon,
             --mytextclock,
             s.mylayoutbox,
-            logout_menu_widget(),
+            logout_menu_widget(),            
         },
     }
 
