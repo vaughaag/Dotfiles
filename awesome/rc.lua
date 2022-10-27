@@ -796,9 +796,9 @@ beautiful.useless_gap = 6
 --Autostart
 awful.spawn.with_shell("picom")
 awful.spawn.with_shell("nitrogen --restore")
-awful.spawn.with_shell("nm-applet")
 awful.spawn.with_shell("volumeicon")
 awful.spawn.with_shell("lxsession")
+awful.spawn.with_shell( os.getenv("HOME") .. "/.config/awesome/autostart.sh")
 
 
    
